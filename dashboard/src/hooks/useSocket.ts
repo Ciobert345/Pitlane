@@ -15,8 +15,21 @@ export const useSocket = ({ handleInitial, handleUpdate }: Props) => {
 	const [connected, setConnected] = useState<boolean>(false);
 
 	useEffect(() => {
+		// In production su Netlify, non tentare la connessione se non ci sono backend reali
+		if (process.env.NODE_ENV === "production" && !env.NEXT_PUBLIC_LIVE_URL.includes("example.com")) {
+			console.log("[Socket] Production mode detected, skipping connection");
+			return;
+		}
+
 		const baseUrl = useSimulator ? "http://localhost:4005" : env.NEXT_PUBLIC_LIVE_URL;
 		console.log("[Socket] Connecting to:", `${baseUrl}/api/realtime`);
+		
+		// Se l'URL è example.com, non tentare la connessione
+		if (baseUrl.includes("example.com")) {
+			console.log("[Socket] Example URL detected, skipping connection");
+			return;
+		}
+
 		const sse = new EventSource(`${baseUrl}/api/realtime`);
 
 		sse.onerror = (e) => {
