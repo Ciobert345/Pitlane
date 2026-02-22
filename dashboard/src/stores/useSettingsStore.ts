@@ -93,7 +93,7 @@ export const useSettingsStore = create<SettingsStore>()(
 				delayIsPaused: true,
 				setDelayIsPaused: (delayIsPaused: boolean) => set({ delayIsPaused }),
 
-				useSimulator: false,
+				useSimulator: process.env.NODE_ENV === "production" ? true : false,
 				setUseSimulator: (useSimulator: boolean) => set({ useSimulator }),
 			}),
 			{

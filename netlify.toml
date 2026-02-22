@@ -4,11 +4,11 @@
    publish = ".next"
 
    [build.environment]
-     # Valori di default solo per far passare la validazione Zod su Netlify.
-     # Sostituiscili con gli URL pubblici reali dei tuoi servizi API e realtime
-     # quando li avrai deployati (es. https://api.tuodominio.com, https://realtime.tuodominio.com).
+     # Abilita il simulator mode per dimostrazione
+     # In produzione, sostituisci con gli URL reali dei tuoi servizi backend
      API_URL = "https://example.com"
      NEXT_PUBLIC_LIVE_URL = "https://example.com"
+     SKIP_ENV_VALIDATION = "1"
 
  [[plugins]]
    package = "@netlify/plugin-nextjs"
