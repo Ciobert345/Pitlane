@@ -50,6 +50,9 @@ const config: NextConfig = {
 		};
 		return config;
 	},
+	turbopack: {
+		// Turbopack configuration
+	},
 };
 
 export default config;
