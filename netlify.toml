@@ -4,10 +4,9 @@
    publish = ".next"
 
    [build.environment]
-     # Abilita il simulator mode per dimostrazione
-     # In produzione, sostituisci con gli URL reali dei tuoi servizi backend
-     API_URL = "https://example.com"
-     NEXT_PUBLIC_LIVE_URL = "https://example.com"
+     # URL Railway del backend deployato
+     API_URL = "https://pitlane-production.up.railway.app"
+     NEXT_PUBLIC_LIVE_URL = "https://pitlane-production.up.railway.app"
      SKIP_ENV_VALIDATION = "1"
 
  [[plugins]]
