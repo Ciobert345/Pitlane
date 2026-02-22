@@ -48,13 +48,12 @@ function Panel({ label, children, className = "" }: { label: string; children: R
 
 function SocketStatus() {
 	const { connected } = useSocket({ handleInitial: () => { }, handleUpdate: () => { } });
-	const useSimulator = useSettingsStore((s) => s.useSimulator);
 	
 	return (
 		<div className="flex items-center gap-2 rounded-full border border-white/5 bg-white/[0.02] px-2.5 py-1">
 			<ConnectionStatus connected={connected} />
 			<span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
-				{connected ? "Live" : useSimulator ? "Simulator" : "No Backend"}
+				{connected ? "Live" : "Connecting..."}
 			</span>
 		</div>
 	);

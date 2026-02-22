@@ -15,7 +15,8 @@ export const useSocket = ({ handleInitial, handleUpdate }: Props) => {
 	const [connected, setConnected] = useState<boolean>(false);
 
 	useEffect(() => {
-		const baseUrl = useSimulator ? "http://localhost:4005" : env.NEXT_PUBLIC_LIVE_URL;
+		// Forza sempre l'uso del backend Railway in produzione
+		const baseUrl = env.NEXT_PUBLIC_LIVE_URL;
 		console.log("[Socket] Connecting to:", `${baseUrl}/api/realtime`);
 		
 		// Se l'URL è example.com, non tentare la connessione
@@ -31,7 +32,7 @@ export const useSocket = ({ handleInitial, handleUpdate }: Props) => {
 			setConnected(false);
 		};
 		sse.onopen = () => {
-			console.log(`[Socket] SSE Connected (${useSimulator ? "SIMULATOR" : "LIVE FEED"})`);
+			console.log(`[Socket] SSE Connected to Railway backend`);
 			setConnected(true);
 		};
 
@@ -46,8 +47,7 @@ export const useSocket = ({ handleInitial, handleUpdate }: Props) => {
 		});
 
 		return () => sse.close();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [useSimulator]);
+	}, []);
 
 	return { connected };
 };
