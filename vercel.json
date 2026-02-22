@@ -1,6 +1,5 @@
 {
-  "framework": "nextjs",
-  "rootDirectory": "dashboard",
+  "version": 2,
   "env": {
     "API_URL": "https://pitlane-production.up.railway.app",
     "NEXT_PUBLIC_LIVE_URL": "https://pitlane-production.up.railway.app",
