@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@theme inline {
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
+}
+
+@theme {
+	--breakpoint-3xl: 1800px;
+
+	--color-popover: rgba(10, 10, 10, 0.98);
+	--color-pane: oklch(14% 0.005 285.82);
+
+	/* F1 Pro Colors - Refined for better harmony */
+	--color-f1-neon: #e10600;
+	/* Official F1 Red */
+	--color-f1-accent: #00d2ff;
+	/* More vibrant racing blue */
+	--color-f1-purple: #b942ff;
+	--color-f1-green: #00ff87;
+	/* Hyper green */
+	--color-f1-yellow: #fff200;
+	/* Sharp yellow */
+
+	--color-glass-border: rgba(255, 255, 255, 0.08);
+	--color-glass-bg: rgba(15, 15, 15, 0.4);
+}
+
+@layer base {
+	body {
+		@apply bg-zinc-950 text-zinc-100 antialiased selection:bg-f1-neon/30;
+		background-image:
+			radial-gradient(at 0% 0%, rgba(225, 6, 0, 0.08) 0px, transparent 50%),
+			radial-gradient(at 100% 0%, rgba(0, 210, 255, 0.06) 0px, transparent 50%),
+			radial-gradient(at 50% 100%, rgba(185, 66, 255, 0.04) 0px, transparent 50%);
+		background-attachment: fixed;
+	}
+}
+
+@layer utilities {
+	.glass {
+		@apply border border-white/10 bg-black/40 backdrop-blur-2xl;
+		box-shadow:
+			inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+			0 8px 32px 0 rgba(0, 0, 0, 0.37);
+	}
+
+	.glass-card {
+		@apply rounded-xl border border-white/5 bg-white/[0.03] p-4 backdrop-blur-md transition-all duration-300;
+		box-shadow:
+			inset 0 1px 1px 0 rgba(255, 255, 255, 0.05),
+			0 4px 24px -1px rgba(0, 0, 0, 0.2);
+	}
+
+	.glass-card:hover {
+		@apply border-white/10 bg-white/[0.06] -translate-y-0.5;
+		box-shadow:
+			inset 0 1px 1px 0 rgba(255, 255, 255, 0.08),
+			0 12px 24px -4px rgba(0, 0, 0, 0.4);
+	}
+
+	.neon-glow-red {
+		box-shadow: 0 0 20px rgba(225, 6, 0, 0.25);
+	}
+
+	.neon-glow-blue {
+		box-shadow: 0 0 20px rgba(0, 210, 255, 0.25);
+	}
+
+	/* Custom Ultra-Sleek Scrollbar for entire app */
+	::-webkit-scrollbar {
+		width: 4px;
+		height: 4px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: rgba(255, 255, 255, 0.1);
+		border-radius: 4px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: rgba(255, 255, 255, 0.2);
+	}
+
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+
+	.no-scrollbar {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+}
+
+.pulse-loading-spinner {
+	animation: pulse-loading 1.2s cubic-bezier(0.52, 0.6, 0.25, 0.99) infinite;
+}
+
+@keyframes pulse-loading {
+	0% {
+		r: 0;
+		opacity: 1;
+	}
+
+	100% {
+		r: 11px;
+		opacity: 0;
+	}
+}

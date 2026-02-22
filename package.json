@@ -1,0 +1,11 @@
+{
+    "name": "f1-dash-root",
+    "version": "4.0.2",
+    "description": "F1 Dashboard Project Root",
+    "scripts": {
+        "dev": "npx concurrently -n \"web,real,api\" -c \"cyan,magenta,yellow\" \"npm --prefix dashboard run dev\" \"cd realtime && npx cross-env RUST_LOG=info ORIGIN=http://localhost:3000 ADDRESS=0.0.0.0:4000 cargo run\" \"cd api && npx cross-env RUST_LOG=info ORIGIN=http://localhost:3000 ADDRESS=0.0.0.0:4001 cargo run\""
+    },
+    "devDependencies": {
+        "concurrently": "^9.1.2"
+    }
+}

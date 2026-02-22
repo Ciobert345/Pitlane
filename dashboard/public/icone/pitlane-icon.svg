@@ -1,0 +1,22 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- P stilizzata: gambo verticale, panciotto con zig-zag e tratto dinamico -->
+  <path
+    d="M8 6v20M8 6h8c4.5 0 7.5 2.8 7.5 6.2S20.5 19 16 19h-5V6z"
+    stroke="white"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+  <!-- Zig-zag / pista dentro la P -->
+  <path
+    d="M12 10v2l2-2 2 2v-1l-1.5 1.5L18 15"
+    stroke="white"
+    stroke-width="1.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+  <!-- Tratto freccia / bandiera -->
+  <path d="M20 8l3 3-2 2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
