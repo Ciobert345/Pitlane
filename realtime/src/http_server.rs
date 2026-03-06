@@ -51,15 +51,8 @@ pub async fn start(state_service: StateService, tx: Sender<String>) -> Result<()
 }
 
 pub fn cors_layer() -> Result<CorsLayer, Error> {
-    let origin = env::var("ORIGIN").unwrap_or_else(|_| "https://f1-dash.com".to_string());
-
-    let origins = origin
-        .split(';')
-        .filter_map(|o| HeaderValue::from_str(o).ok())
-        .collect::<Vec<HeaderValue>>();
-
     Ok(CorsLayer::new()
-        .allow_origin(origins)
+        .allow_origin(tower_http::cors::Any)
         .allow_methods([Method::GET, Method::POST, Method::OPTIONS, Method::CONNECT])
         .allow_headers(tower_http::cors::Any))
 }
