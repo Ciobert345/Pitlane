@@ -26,7 +26,7 @@ export default function Layout({ children }: Props) {
 
 	return (
 		<div className="h-full overflow-y-auto">
-			<main className="mx-auto max-w-6xl px-4 py-6 md:px-6 md:py-8 min-h-screen">
+			<main className="mx-auto max-w-[1400px] px-3 py-4 md:px-6 md:py-8 min-h-screen">
 				{children}
 				<Footer />
 			</main>

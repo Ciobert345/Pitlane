@@ -417,8 +417,8 @@ export default function LapTimeChart() {
                 )}
             </div>
 
-            {/* Legend */}
-            <div className="flex items-center gap-5 shrink-0 pb-0.5">
+            {/* Legend - Responsive wrapping and spacing */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 shrink-0 pb-4 md:pb-0.5">
                 {hasSynth && (
                     <div className="flex items-center gap-2">
                         <svg width="16" height="6"><line x1="0" y1="3" x2="16" y2="3" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" strokeDasharray="4 3" /></svg>
@@ -433,7 +433,7 @@ export default function LapTimeChart() {
                     <div className="h-2 w-2 rounded-full bg-emerald-400" style={{ boxShadow: "0 0 4px #34d399" }} />
                     <span className="text-[7px] font-bold uppercase tracking-widest text-zinc-600">Personal best</span>
                 </div>
-                <span className="ml-auto text-[7px] text-zinc-700">Hover dots for details</span>
+                <span className="ml-auto text-[7px] text-zinc-700 hidden sm:inline">Hover dots for details</span>
             </div>
         </div>
     );

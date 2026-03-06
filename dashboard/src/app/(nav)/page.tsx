@@ -21,26 +21,26 @@ export default function Home() {
 	return (
 		<div className="flex flex-col gap-6 md:gap-8 pb-4">
 			{/* Desktop-like App Header */}
-			<section className="flex items-center justify-between rounded-xl border border-white/10 bg-zinc-950/60 p-4 shadow-xl backdrop-blur-2xl">
-				<div className="flex items-center gap-5">
-					<div className="relative flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 shadow-inner border border-white/5">
+			<section className="flex flex-col sm:flex-row items-center sm:items-center justify-between rounded-xl border border-white/10 bg-zinc-950/60 p-4 sm:p-6 shadow-xl backdrop-blur-2xl gap-6 sm:gap-4 text-center sm:text-left">
+				<div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5">
+					<div className="relative flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 shadow-inner border border-white/5 shrink-0">
 						<div className="absolute inset-0 rounded-xl bg-f1-neon/10 blur-xl"></div>
 						<Image src={icon} alt="Pitlane Logo" width={36} className="relative z-10 drop-shadow-lg" />
 					</div>
 					<div>
-						<h1 className="text-2xl font-bold tracking-tight text-white mb-1">
+						<h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-1">
 							Pitlane <span className="text-f1-neon ml-1 opacity-90">Dashboard</span>
 						</h1>
-						<div className="flex items-center gap-3">
+						<div className="flex items-center justify-center sm:justify-start gap-3">
 							<span className="flex h-2 w-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span>
-							<p className="text-sm text-zinc-400">Alpha Build &mdash; Real-time F1 Telemetry</p>
+							<p className="text-sm text-zinc-400">Alpha Build &mdash; Real-time Telemetry</p>
 						</div>
 					</div>
 				</div>
 
-				<div className="hidden md:flex gap-3">
-					<Link href="/dashboard">
-						<Button className="rounded-lg border border-f1-neon/30 bg-f1-neon/10 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:border-f1-neon/50 hover:bg-f1-neon/20 hover:shadow-[0_0_15px_rgba(225,6,0,0.15)]">
+				<div className="flex w-full sm:w-auto gap-3">
+					<Link href="/dashboard" className="w-full sm:w-auto">
+						<Button className="w-full sm:w-auto rounded-lg border border-f1-neon/30 bg-f1-neon/10 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:border-f1-neon/50 hover:bg-f1-neon/20 hover:shadow-[0_0_15px_rgba(225,6,0,0.15)]">
 							Launch Dashboard
 						</Button>
 					</Link>

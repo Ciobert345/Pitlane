@@ -59,7 +59,9 @@ export default function TrackCircle() {
             // Radial position by gap: three clean orbits
             let orbitRadius: number;
             if (isPit) {
-                orbitRadius = RADIUS * 0.38;
+                // Widened PIT orbit on mobile to prevent clustering (was 0.38)
+                const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+                orbitRadius = RADIUS * (isMobile ? 0.45 : 0.38);
             } else if (gap < 5) {
                 orbitRadius = RADIUS * 0.65;
             } else {
@@ -164,7 +166,11 @@ export default function TrackCircle() {
                     {positionedDrivers.map((d) => {
                         const teamColor = `#${d.driver?.TeamColour || "888"}`;
                         const isFocused = focusedDriver === d.RacingNumber;
-                        const bubbleR = isFocused ? 24 : (d.isLeader ? 20 : 16);
+                        const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+                        // Scaled down bubbles on mobile to prevent "jumble" (was 16/20/24)
+                        const bubbleR = isMobile
+                            ? (isFocused ? 20 : (d.isLeader ? 16 : 13))
+                            : (isFocused ? 24 : (d.isLeader ? 20 : 16));
                         const opacityBase = d.isOut ? 0.2 : (d.isPit ? 0.5 : 1);
                         const finalOpacity = focusedDriver && !isFocused ? opacityBase * 0.4 : opacityBase;
 

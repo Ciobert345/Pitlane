@@ -28,7 +28,7 @@ function TabBar() {
 						key={tab.id}
 						onClick={() => setTab(tab.id)}
 						className={clsx(
-							"relative px-2 py-1 text-[10px] font-bold uppercase tracking-[0.15em] transition-all duration-300",
+							"relative px-3 py-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300",
 							isActive ? "text-white" : "text-zinc-500 hover:text-zinc-300",
 						)}
 					>
@@ -77,28 +77,31 @@ export default function LeaderBoard() {
 					<TabBar />
 				</div>
 
-				<div className="grid grid-cols-[85px_30px_1fr] items-center gap-2 px-3 py-1 border-b border-white/5 mt-0.5">
+				<div className="grid grid-cols-[55px_40px_1fr] sm:grid-cols-[60px_35px_1fr] md:grid-cols-[85px_30px_1fr] items-center gap-1 md:gap-2 px-2 md:px-3 py-1 border-b border-white/5 mt-0.5">
 					<div className="shrink-0">
-						<span className="text-[9px] font-bold uppercase tracking-widest text-zinc-600">POS</span>
+						<span className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-zinc-600">POS</span>
 					</div>
 
 					<div className="shrink-0 flex justify-center border-l border-white/10 h-3 items-center">
-						<span className="text-[9px] font-bold uppercase tracking-widest text-zinc-600 ml-2">MD</span>
+						<span className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-zinc-600 ml-1 md:ml-2">
+							<span className="hidden sm:inline">MD</span>
+							<span className="sm:hidden">M</span>
+						</span>
 					</div>
 
 					{activeTab === "timing" && (
-						<div className="grid grid-cols-[30px_45px_60px_1fr] items-center gap-2 border-l border-white/10 h-3 ml-1 pl-2">
+						<div className="grid grid-cols-[30px_1fr_55px_75px] sm:grid-cols-[30px_1fr_60px_80px] md:grid-cols-[30px_45px_60px_1fr] items-center gap-1 md:gap-2 border-l border-white/10 h-3 ml-1 pl-1 md:pl-2">
 							<div className="flex justify-center">
-								<span className="text-[9px] font-bold uppercase tracking-widest text-zinc-600">TYRE</span>
+								<span className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-zinc-600">TYRE</span>
 							</div>
-							<div className="flex justify-center border-l border-white/10 h-2">
+							<div className="hidden md:flex justify-center border-l border-white/10 h-2">
 								<span className="text-[9px] font-bold uppercase tracking-widest text-zinc-600">HIST</span>
 							</div>
 							<div className="flex justify-center border-l border-white/10 h-2">
-								<span className="text-[9px] font-bold uppercase tracking-widest text-zinc-600">GAP</span>
+								<span className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-zinc-600">GAP</span>
 							</div>
 							<div className="flex justify-end pr-1 border-l border-white/10 h-2">
-								<span className="text-[9px] font-bold uppercase tracking-widest text-zinc-600">LAP</span>
+								<span className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-zinc-600">LAP</span>
 							</div>
 						</div>
 					)}

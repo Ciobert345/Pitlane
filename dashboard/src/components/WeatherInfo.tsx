@@ -283,7 +283,7 @@ export default function DataWeatherInfo({ mini = false }: { mini?: boolean }) {
 	}
 
 	return (
-		<div className="flex items-center gap-5 border-l border-white/10 pl-5">
+		<div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-5 border-l-0 sm:border-l border-white/10 pl-0 sm:pl-5">
 			<PremiumGauge
 				value={Math.round(parseFloat(weather.TrackTemp))}
 				max={70}

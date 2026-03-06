@@ -19,6 +19,42 @@ import { useSettingsStore } from "@/stores/useSettingsStore";
 import { useSocket } from "@/hooks/useSocket";
 import { useDataStore } from "@/stores/useDataStore";
 import { useEffect } from "react";
+import { useDashboardTabStore, type DashboardTab } from "@/stores/useDashboardTabStore";
+import clsx from "clsx";
+
+const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
+	{ id: "timing", label: "Timing" },
+	{ id: "track", label: "Track" },
+	{ id: "feeds", label: "Feeds" },
+	{ id: "analysis", label: "Analysis" },
+];
+
+function DashboardTabs() {
+	const activeTab = useDashboardTabStore((s) => s.activeTab);
+	const setTab = useDashboardTabStore((s) => s.setTab);
+
+	return (
+		<div className="flex lg:hidden items-center gap-1 p-1 bg-zinc-900/50 backdrop-blur-xl border border-white/5 rounded-xl mb-2 sticky top-0 z-[100]">
+			{DASHBOARD_TABS.map((tab) => {
+				const isActive = activeTab === tab.id;
+				return (
+					<button
+						key={tab.id}
+						onClick={() => setTab(tab.id)}
+						className={clsx(
+							"flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all duration-300",
+							isActive
+								? "bg-f1-neon text-white shadow-[0_0_15px_rgba(225,6,0,0.4)]"
+								: "text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
+						)}
+					>
+						{tab.label}
+					</button>
+				);
+			})}
+		</div>
+	);
+}
 
 const fadeItem: Variants = {
 	hidden: { opacity: 0, scale: 0.99 },
@@ -62,6 +98,7 @@ function SocketStatus() {
 
 export default function Page() {
 	const layoutMode = useLayoutStore((s) => s.layoutMode);
+	const activeTab = useDashboardTabStore((s) => s.activeTab);
 	const [activeFeedTab, setActiveFeedTab] = useState<"control" | "investigations">("control");
 
 	const messages = useDataStore((state) => state.state?.RaceControlMessages?.Messages);
@@ -80,8 +117,10 @@ export default function Page() {
 	const hasNewInvestigations = investigationsCount > lastSeenInvestigations && activeFeedTab !== "investigations";
 
 	return (
-		// Fill the parent container height exactly — no page-level scroll
-		<div className="flex h-full min-h-0 flex-col gap-2 p-2">
+		// Fill the parent container height exactly — no page-level scroll on desktop, but allow scroll on mobile
+		// Fill the parent container height exactly — no page-level scroll on desktop, but allow scroll on mobile
+		<div className="flex flex-col h-full min-h-0 gap-2 p-2 overflow-y-auto lg:overflow-hidden">
+			<DashboardTabs />
 
 			{/* Mode Content */}
 			<AnimatePresence mode="wait">
@@ -89,29 +128,41 @@ export default function Page() {
 					<motion.div
 						key="race"
 						variants={fadeItem} initial="hidden" animate="show" exit="exit"
-						className="grid min-h-0 flex-1 grid-cols-[minmax(0,420px)_1fr_300px] gap-3"
+						className="grid grid-cols-1 lg:grid-cols-[minmax(0,420px)_1fr_300px] lg:min-h-0 lg:flex-1 gap-4"
 					>
 						{/* LEFT: Timing Tower */}
-						<div className="flex min-h-0 flex-col rounded-2xl border border-white/5 bg-zinc-950/20 px-4 py-3">
+						<div className={clsx(
+							"flex flex-col rounded-2xl border border-white/5 bg-zinc-950/20 px-4 py-3 lg:min-h-0",
+							activeTab !== "timing" && "hidden lg:flex"
+						)}>
 							<Label>Timing Tower</Label>
-							<div className="flex-1 min-h-0">
+							<div className="flex-1 lg:min-h-0 min-h-[500px]">
 								<LeaderBoard />
 							</div>
 						</div>
 
 						{/* CENTER: Live Track & Feeds */}
-						<div className="flex min-h-0 flex-1 flex-col gap-4">
-							<div className="flex-[4] flex min-h-0 flex-col rounded-xl border border-white/5 bg-black/50 backdrop-blur-xl overflow-hidden">
+						<div className={clsx(
+							"flex min-h-0 flex-1 flex-col gap-4",
+							activeTab !== "track" && activeTab !== "feeds" && "hidden lg:flex"
+						)}>
+							<div className={clsx(
+								"flex-[4] flex min-h-[400px] lg:min-h-0 flex-col rounded-xl border border-white/5 bg-black/50 backdrop-blur-xl overflow-hidden",
+								activeTab !== "track" && "hidden lg:flex"
+							)}>
 								<div className="px-3 pt-3 pb-1 shrink-0">
 									<Label>Live Track</Label>
 								</div>
-								<div className="flex-1 min-h-0 w-full">
+								<div className="flex-1 min-h-[300px] lg:min-h-0 w-full">
 									<Map />
 								</div>
 							</div>
 
 							{/* Unified Feeds Row */}
-							<div className="grid min-h-0 h-60 shrink-0 grid-cols-[1fr_1.1fr_1fr] gap-3">
+							<div className={clsx(
+								"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1.1fr_1fr] min-h-0 lg:h-60 shrink-0 gap-3 mt-auto",
+								activeTab !== "feeds" && "hidden lg:grid"
+							)}>
 								<div className="flex min-h-0 flex-col rounded-xl border border-white/5 bg-black/20 backdrop-blur-md px-3 py-2">
 									{/* Premium Tab Switcher */}
 									<div className="flex items-center gap-1 mb-3 bg-white/5 p-1 rounded-lg mx-auto">
@@ -135,7 +186,7 @@ export default function Page() {
 										</button>
 									</div>
 
-									<div className="flex-1 overflow-y-auto custom-scrollbar">
+									<div className="flex-1 min-h-[300px] lg:min-h-0 overflow-y-auto custom-scrollbar">
 										{activeFeedTab === "control" ? (
 											<RaceControl />
 										) : (
@@ -143,24 +194,27 @@ export default function Page() {
 										)}
 									</div>
 								</div>
-								<Panel label="Team Radio" className="rounded-xl border border-white/5 bg-black/20 backdrop-blur-md px-3 py-2">
+								<Panel label="Team Radio" className="rounded-xl border border-white/5 bg-black/20 backdrop-blur-md px-3 py-2 min-h-[300px] lg:min-h-0">
 									<TeamRadios />
 								</Panel>
-								<div className="flex min-h-0 flex-col rounded-xl border border-white/5 bg-black/20 backdrop-blur-md overflow-hidden relative">
+								<div className="flex min-h-[160px] md:min-h-0 flex-col rounded-xl border border-white/5 bg-black/20 backdrop-blur-md overflow-hidden relative">
 									<WeatherWidget />
 								</div>
 							</div>
 						</div>
 
 						{/* RIGHT: Analysis Sidebar */}
-						<div className="flex min-h-0 flex-col gap-4">
-							<div className="flex-[1.5] flex min-h-0 flex-col rounded-xl border border-white/5 bg-white/[0.02] p-4">
+						<div className={clsx(
+							"flex flex-col gap-4 lg:min-h-0",
+							activeTab !== "analysis" && "hidden lg:flex"
+						)}>
+							<div className="flex-[1.5] flex flex-col rounded-xl border border-white/5 bg-white/[0.02] p-4 lg:min-h-0 min-h-[300px]">
 								<Label>Track Radar</Label>
-								<div className="flex-1 min-h-0 relative"><TrackCircle /></div>
+								<div className="flex-1 lg:min-h-0 relative"><TrackCircle /></div>
 							</div>
-							<div className="flex-[2.5] flex min-h-0 flex-col rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-4 shadow-2xl backdrop-blur-sm">
+							<div className="flex-[2.5] flex flex-col rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-4 shadow-2xl backdrop-blur-sm lg:min-h-0 min-h-[400px]">
 								<Label>Lap Times</Label>
-								<div className="flex-1 min-h-0"><LapTimeChart /></div>
+								<div className="flex-1 lg:min-h-0"><LapTimeChart /></div>
 							</div>
 						</div>
 					</motion.div>
@@ -168,7 +222,7 @@ export default function Page() {
 					<motion.div
 						key="focus"
 						variants={fadeItem} initial="hidden" animate="show" exit="exit"
-						className="grid min-h-0 flex-1 grid-cols-[minmax(0,500px)_1fr] gap-4"
+						className="grid grid-cols-1 lg:grid-cols-[minmax(0,500px)_1fr] min-h-0 flex-1 gap-4"
 					>
 						{/* Timing Tower */}
 						<div className="flex min-h-0 flex-col rounded-2xl border border-white/5 bg-white/[0.02] p-4">
@@ -179,22 +233,22 @@ export default function Page() {
 						</div>
 
 						{/* Right: Radar + Map + Strategy + Lap Times */}
-						<div className="grid min-h-0 grid-cols-2 grid-rows-2 gap-4">
-							<div className="flex min-h-0 flex-col rounded-xl border border-white/5 bg-white/[0.02] p-4">
+						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-rows-2 lg:min-h-0 gap-4">
+							<div className="flex flex-col rounded-xl border border-white/5 bg-white/[0.02] p-4 lg:min-h-0 min-h-[300px]">
 								<Label>Track Radar</Label>
-								<div className="flex-1 min-h-0 relative"><TrackCircle /></div>
+								<div className="flex-1 lg:min-h-0 relative"><TrackCircle /></div>
 							</div>
 							<div className="flex min-h-0 flex-col rounded-xl border border-white/5 bg-black/50 backdrop-blur-xl overflow-hidden p-3">
 								<Label>Track Map</Label>
 								<div className="flex-1 min-h-0 relative"><Map /></div>
 							</div>
-							<div className="flex min-h-0 flex-col rounded-xl border border-white/5 bg-white/[0.02] p-4">
+							<div className="flex flex-col rounded-xl border border-white/5 bg-white/[0.02] p-4 lg:min-h-0 min-h-[400px]">
 								<Label>Strategy Center</Label>
-								<div className="flex-1 min-h-0 relative"><StrategyWidget /></div>
+								<div className="flex-1 lg:min-h-0 relative"><StrategyWidget /></div>
 							</div>
-							<div className="flex min-h-0 flex-col rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-4 shadow-2xl backdrop-blur-sm">
+							<div className="flex flex-col rounded-xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-4 shadow-2xl backdrop-blur-sm lg:min-h-0 min-h-[300px]">
 								<Label>Lap Times</Label>
-								<div className="flex-1 min-h-0"><LapTimeChart /></div>
+								<div className="flex-1 lg:min-h-0"><LapTimeChart /></div>
 							</div>
 						</div>
 					</motion.div>

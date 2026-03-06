@@ -48,28 +48,28 @@ export default function GlobalHeader() {
                     />
                 )}
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2 h-4">
                             {isDashboard && (
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-f1-neon/10 border border-f1-neon/20 shadow-[0_0_10px_rgba(225,6,0,0.15)]"
+                                    className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-f1-neon/10 border border-f1-neon/20 shadow-[0_0_10px_rgba(225,6,0,0.15)]"
                                 >
-                                    <span className="relative flex h-1.5 w-1.5">
+                                    <span className="relative flex h-1 w-1">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-f1-neon opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-f1-neon"></span>
+                                        <span className="relative inline-flex rounded-full h-1 w-1 bg-f1-neon"></span>
                                     </span>
-                                    <span className="text-[7px] font-black text-f1-neon uppercase tracking-wider leading-none">LIVE</span>
+                                    <span className="text-[6px] md:text-[7px] font-black text-f1-neon uppercase tracking-wider leading-none">LIVE</span>
                                 </motion.div>
                             )}
-                            <h1 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 leading-none">
+                            <h1 className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-white/40 leading-none truncate max-w-[100px] md:max-w-none">
                                 {getTitle()}
                             </h1>
                         </div>
                         {isDashboard && (
-                            <SessionInfo compact className="!p-0 !bg-transparent !border-0 mt-1" />
+                            <SessionInfo compact className="!p-0 !bg-transparent !border-0 mt-1 scale-90 md:scale-100 origin-left" />
                         )}
                     </div>
                 </div>
@@ -90,7 +90,7 @@ export default function GlobalHeader() {
                 </AnimatePresence>
             </div>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 md:gap-6">
                 <AnimatePresence>
                     {isDashboard && (
                         <motion.div
@@ -107,10 +107,12 @@ export default function GlobalHeader() {
                     )}
                 </AnimatePresence>
 
-                <div className="flex items-center gap-5 glass bg-white/[0.03] backdrop-blur-3xl rounded-full px-5 py-2 border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
-                    <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 md:gap-5 glass bg-white/[0.03] backdrop-blur-3xl rounded-full px-3 md:px-5 py-2 border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
+                    <div className="flex items-center gap-1.5 md:gap-3">
                         <DelayInput saveDelay={500} />
-                        <DelayTimer />
+                        <div className="hidden xs:block">
+                            <DelayTimer />
+                        </div>
                     </div>
                     <ConnectionStatus connected={connected} />
                 </div>

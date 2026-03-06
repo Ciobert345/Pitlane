@@ -94,7 +94,7 @@ export default function Sidebar({ connected }: Props) {
 	}, [unpin]);
 
 	return (
-		<div className="h-full flex flex-shrink-0 relative">
+		<div className="h-full flex flex-shrink-0 relative w-0 md:w-auto">
 			{/* Spacer for pinned state */}
 			<motion.div
 				className="hidden md:block"
@@ -106,8 +106,8 @@ export default function Sidebar({ connected }: Props) {
 			<AnimatePresence>
 				{opened && (
 					<motion.div
-						onTouchEnd={() => close()}
-						className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-md md:hidden"
+						onClick={() => close()}
+						className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-md md:hidden"
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
@@ -118,8 +118,9 @@ export default function Sidebar({ connected }: Props) {
 			{/* Invisible Hover Trigger Area (only when not pinned) */}
 			{!pinned && (
 				<div
-					className="fixed top-0 left-0 z-[80] h-full w-[12px] bg-transparent"
+					className="fixed top-0 left-0 z-[80] h-full w-[16px] md:w-[12px] bg-transparent"
 					onMouseEnter={handleHoverStart}
+					onClick={() => { if (window.innerWidth < 1024) open(); }}
 				/>
 			)}
 

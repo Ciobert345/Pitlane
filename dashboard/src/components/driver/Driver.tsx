@@ -63,7 +63,7 @@ export default function Driver({ driver, timingDriver, position }: Props) {
 			layout="position"
 			onClick={handleClick}
 			className={clsx(
-				"group relative grid grid-cols-[85px_30px_1fr] cursor-pointer select-none items-center gap-2 rounded-xl p-1.5 transition-all duration-200 border border-transparent overflow-hidden",
+				"group relative grid grid-cols-[55px_40px_1fr] sm:grid-cols-[60px_35px_1fr] md:grid-cols-[85px_30px_1fr] cursor-pointer select-none items-center gap-1 sm:gap-2 rounded-xl p-1.5 transition-all duration-200 border border-transparent overflow-hidden",
 				{
 					"opacity-40 grayscale": timingDriver.KnockedOut || timingDriver.Retired || timingDriver.Stopped,
 					"bg-white/[0.04] border-white/5": !isFocused && !favoriteDriver && !hasFastest,
@@ -90,18 +90,18 @@ export default function Driver({ driver, timingDriver, position }: Props) {
 				/>
 			)}
 
-			{/* Column 1: Position Tag - Precise 85px allocation */}
-			<div className="shrink-0 w-[85px]">
+			{/* Column 1: Position Tag - Precise allocation */}
+			<div className="shrink-0 w-[55px] sm:w-[60px] md:w-[85px]">
 				<DriverTag
 					short={driver.Tla}
 					teamColor={driver.TeamColour}
 					position={position}
-					className="w-full h-10 shadow-xl shadow-black/20"
+					className="w-full h-8 md:h-10 shadow-xl shadow-black/20"
 				/>
 			</div>
 
-			{/* Column 2: Aero/Override - 30px fixed */}
-			<div className="flex justify-center shrink-0 w-[30px] border-x border-white/5 h-full items-center">
+			{/* Column 2: Aero/Override - Dynamic fixed width */}
+			<div className="flex justify-center shrink-0 w-[40px] sm:w-[35px] md:w-[30px] border-x border-white/5 h-full items-center">
 				<DriverAeroMode
 					on={carData ? isXModeActive(carData[45]) : false}
 					possible={carData ? isOvertakePossible(carData[45]) : false}
@@ -110,26 +110,26 @@ export default function Driver({ driver, timingDriver, position }: Props) {
 				/>
 			</div>
 
-			{/* Column 3: Tab Content (Sub-grid for Timing) - 4 Column Layout */}
+			{/* Column 3: Tab Content (Sub-grid for Timing) */}
 			{activeTab === "timing" && (
-				<div className="grid grid-cols-[30px_45px_60px_1fr] items-center gap-2 w-full h-full">
+				<div className="grid grid-cols-[30px_1fr_55px_75px] sm:grid-cols-[30px_1fr_60px_80px] md:grid-cols-[30px_45px_60px_1fr] items-center gap-1 md:gap-2 w-full h-full">
 					{/* Tire Icon */}
 					<div className="flex justify-center shrink-0">
 						<DriverTire stints={appTimingDriver?.Stints} mode="icon" />
 					</div>
 
-					{/* Tire Stats */}
-					<div className="shrink-0 border-r border-white/5 pr-2 h-full flex items-center">
+					{/* Tire Stats (Hidden on mobile) */}
+					<div className="hidden md:flex shrink-0 border-r border-white/5 pr-2 h-full items-center">
 						<DriverTire stints={appTimingDriver?.Stints} mode="stats" />
 					</div>
 
 					{/* Gap / Interval */}
-					<div className="shrink-0">
+					<div className="shrink-0 text-center lg:text-left">
 						<DriverGap timingDriver={timingDriver} sessionPart={sessionPart} />
 					</div>
 
 					{/* Last Lap Time */}
-					<div className="text-right flex-1 min-w-0 font-mono">
+					<div className="text-right flex-1 min-w-0 font-mono pr-1">
 						<DriverLapTime
 							last={timingDriver.LastLapTime}
 							best={timingDriver.BestLapTime}

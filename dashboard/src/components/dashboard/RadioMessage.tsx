@@ -76,24 +76,24 @@ export default function RadioMessage({ driver, capture, basePath, gmtOffset }: P
 				style={{ backgroundColor: teamColor }}
 			/>
 
-			<DriverTag className="!w-fit !h-8 border-none bg-zinc-900/50 shrink-0" teamColor={driver.TeamColour} short={driver.Tla} />
+			<DriverTag className="!w-fit !h-8 md:!h-10 border-none bg-zinc-900/50 shrink-0" teamColor={driver.TeamColour} short={driver.Tla} />
 
 			<button
 				onClick={togglePlayback}
 				className={clsx(
-					"flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-all duration-200",
+					"flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg border transition-all duration-200",
 					playing
 						? "border-white bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]"
 						: "border-white/10 bg-white/5 text-white hover:border-white/30 hover:bg-white/10"
 				)}
 			>
 				{playing ? (
-					<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+					<svg viewBox="0 0 24 24" className="w-4 h-4 md:w-5 md:h-5" fill="currentColor">
 						<rect x="6" y="4" width="3" height="16" rx="1" />
 						<rect x="15" y="4" width="3" height="16" rx="1" />
 					</svg>
 				) : (
-					<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" className="ml-1">
+					<svg viewBox="0 0 24 24" className="w-4 h-4 md:w-5 md:h-5 ml-1" fill="currentColor">
 						<path d="M7 4v16l12-8z" strokeLinejoin="round" />
 					</svg>
 				)}
@@ -127,10 +127,10 @@ export default function RadioMessage({ driver, capture, basePath, gmtOffset }: P
 			</div>
 
 			<div className="flex flex-col items-end gap-0.5 shrink-0 opacity-60">
-				<span className="text-[8px] font-black tracking-tighter text-zinc-400 uppercase">
+				<span className="text-[7px] md:text-[8px] font-black tracking-tighter text-zinc-400 uppercase">
 					{trackTime}
 				</span>
-				<span className="text-[8px] font-bold tabular-nums text-zinc-500 uppercase">
+				<span className="text-[7px] md:text-[8px] font-bold tabular-nums text-zinc-500 uppercase">
 					{localTime}
 				</span>
 			</div>

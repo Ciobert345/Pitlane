@@ -11,7 +11,7 @@ type Props = {
 
 export default function WeekendSchedule({ sessions }: Props) {
 	return (
-		<div className="grid grid-cols-3 gap-8 pt-2">
+		<div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pt-2">
 			{groupSessionByDay(sessions).map((day, i) => (
 				<div className="flex flex-col" key={`next.round.day.${i}`}>
 					<p>{utc(day.date).local().format("dddd")}</p>

@@ -130,7 +130,7 @@ export default function StrategyWidget() {
             <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto pr-1 custom-scrollbar">
 
                 {/* Current Active Tyre Header */}
-                <div className="grid grid-cols-3 gap-3 shrink-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 shrink-0">
                     <div className="relative overflow-hidden rounded-xl border border-white/10 bg-black/40 p-3 shadow-lg backdrop-blur-sm">
                         <div className={clsx("absolute top-0 left-0 w-full h-[2px]", activeStint?.colorClass)} />
                         <p className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-2">Fitted Compound</p>
@@ -152,12 +152,12 @@ export default function StrategyWidget() {
                     </div>
 
                     {/* Predicted Pit Stop */}
-                    <div className="relative overflow-hidden rounded-xl border border-f1-accent/20 bg-f1-accent/5 p-3 shadow-[0_0_15px_rgba(0,210,255,0.05)] backdrop-blur-sm flex flex-col justify-between">
+                    <div className="relative overflow-hidden rounded-xl border border-f1-accent/20 bg-f1-accent/5 p-3 shadow-[0_0_15px_rgba(0,210,255,0.05)] backdrop-blur-sm flex flex-col justify-between sm:col-span-2 md:col-span-1">
                         <p className="text-[9px] font-black uppercase tracking-[0.2em] text-f1-accent mb-1">Predicted Pit</p>
                         {isGoingToEnd || currentLap >= totalLaps ? (
                             <span className="text-sm font-black uppercase tracking-widest text-white drop-shadow-md mt-auto leading-none pb-0.5">To The End</span>
                         ) : (
-                            <div className="flex items-end justify-between mt-auto">
+                            <div className="flex items-end justify-between mt-auto gap-4">
                                 <span className="text-xl font-black tabular-nums text-white drop-shadow-md leading-none">L{predictedPitLap}</span>
                                 <div className="flex items-center gap-1.5 opacity-90 mb-0.5">
                                     <span className="text-[8px] font-black uppercase tracking-widest text-zinc-400">Next</span>
@@ -193,15 +193,15 @@ export default function StrategyWidget() {
                 <div className="flex flex-col gap-2 mt-4">
                     <p className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500 mb-2">Stint History</p>
                     {stints.map((stint, i) => (
-                        <div key={stint.id} className={clsx("relative flex items-center justify-between px-4 py-3 rounded-xl border transition-all duration-300", i === activeStintIndex ? "bg-white/[0.04] border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.03)]" : "bg-black/20 border-white/5 opacity-70")}>
-                            <div className="flex items-center gap-4 w-1/2">
+                        <div key={stint.id} className={clsx("relative flex flex-col md:flex-row md:items-center justify-between px-4 py-3 rounded-xl border transition-all duration-300", i === activeStintIndex ? "bg-white/[0.04] border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.03)]" : "bg-black/20 border-white/5 opacity-70")}>
+                            <div className="flex items-center gap-4 w-full md:w-1/2">
                                 <span className="text-[12px] font-black text-zinc-500 w-4">{i + 1}</span>
                                 <div className={clsx("h-3 w-3 rounded-full ring-2 ring-black", stint.colorClass)} />
                                 <span className="text-[11px] font-bold uppercase tracking-widest text-white">
                                     {stint.compound}
                                 </span>
                             </div>
-                            <div className="flex items-center justify-between w-1/2">
+                            <div className="flex items-center justify-between w-full md:w-1/2 mt-1 md:mt-0">
                                 <span className={clsx("text-[10px] font-bold uppercase tracking-widest", stint.isNew ? "text-emerald-400/80" : "text-amber-500/80")}>
                                     {stint.isNew ? "New" : "Used"}
                                 </span>

@@ -52,9 +52,10 @@ interface NativePlayerProps {
     url: string;
     channelName: string;
     onToggleSidebar?: () => void;
+    onToggleHub?: () => void;
 }
 
-function NativeHlsPlayer({ url, channelName }: NativePlayerProps) {
+function NativeHlsPlayer({ url, channelName, onToggleHub }: NativePlayerProps) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const hlsRef = useRef<Hls | null>(null);
     const [playing, setPlaying] = useState(false);
@@ -143,30 +144,32 @@ function NativeHlsPlayer({ url, channelName }: NativePlayerProps) {
                         exit={{ opacity: 0, x: -20 }}
                         className="absolute top-8 left-8 flex flex-col gap-4 pointer-events-none"
                     >
-                        <div className="glass bg-black/40 backdrop-blur-2xl px-4 py-3 rounded-2xl border border-white/10 shadow-2xl flex flex-col gap-2">
+                        <div className="glass bg-black/40 backdrop-blur-2xl px-3 md:px-4 py-2 md:py-3 rounded-xl md:rounded-2xl border border-white/10 shadow-2xl flex flex-col gap-1.5 md:gap-2">
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-f1-neon animate-pulse" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">Establish Uplink</span>
+                                <div className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-f1-neon animate-pulse" />
+                                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white">Establish Uplink</span>
                             </div>
-                            <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-4 md:gap-6">
                                 <div className="flex flex-col">
-                                    <span className="text-[8px] font-black text-zinc-500 uppercase">Bitrate</span>
-                                    <span className="text-[12px] font-mono font-bold text-f1-neon">{(stats.bitrate / 1000000).toFixed(1)} Mbps</span>
+                                    <span className="text-[7px] md:text-[8px] font-black text-zinc-500 uppercase">Bitrate</span>
+                                    <span className="text-[10px] md:text-[12px] font-mono font-bold text-f1-neon">{(stats.bitrate / 1000000).toFixed(1)} Mbps</span>
                                 </div>
-                                <div className="w-px h-8 bg-white/5" />
+                                <div className="w-px h-6 md:h-8 bg-white/5" />
                                 <div className="flex flex-col">
-                                    <span className="text-[8px] font-black text-zinc-500 uppercase">Latency</span>
-                                    <span className="text-[12px] font-mono font-bold text-cyan-400">1.2s</span>
+                                    <span className="text-[7px] md:text-[8px] font-black text-zinc-500 uppercase">Latency</span>
+                                    <span className="text-[10px] md:text-[12px] font-mono font-bold text-cyan-400">1.2s</span>
                                 </div>
-                                <div className="w-px h-8 bg-white/5" />
-                                <div className="flex items-center gap-2">
-                                    <Activity size={16} className="text-zinc-600" />
-                                    <ShieldCheck size={16} className="text-f1-neon" />
+                                <div className="hidden sm:block w-px h-8 bg-white/5" />
+                                <div className="hidden sm:flex items-center gap-2">
+                                    <Activity size={14} className="text-zinc-600" />
+                                    <ShieldCheck size={14} className="text-f1-neon" />
                                 </div>
                             </div>
                         </div>
 
-                        <TechBadge>Encrypted Node: {getLang(channelName)}</TechBadge>
+                        <div className="flex">
+                            <TechBadge>Encrypted Node: {getLang(channelName)}</TechBadge>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -174,14 +177,23 @@ function NativeHlsPlayer({ url, channelName }: NativePlayerProps) {
             {/* HUD: Buttons */}
             <AnimatePresence>
                 {showControls && (
-                    <div className="absolute top-8 right-8 flex gap-3 z-50">
-                        {/* Global Navigation Hub (Requested by user) */}
+                    <div className="absolute top-4 md:top-8 right-4 md:right-8 flex gap-2 md:gap-3 z-50">
+                        {/* Satellite Hub Toggle for Mobile */}
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onToggleHub?.(); }}
+                            className="lg:hidden size-10 md:size-12 glass bg-white/5 hover:bg-f1-neon/20 border border-white/10 hover:border-f1-neon/40 rounded-xl md:rounded-2xl flex items-center justify-center transition-all group shadow-2xl"
+                            title="Open Satellite Hub"
+                        >
+                            <List size={18} className="text-white group-hover:text-f1-neon" />
+                        </button>
+
+                        {/* Global Navigation Hub */}
                         <button
                             onClick={(e) => { e.stopPropagation(); openSidebar(); }}
-                            className="size-12 glass bg-white/5 hover:bg-cyan-400/20 border border-white/10 hover:border-cyan-400/40 rounded-2xl flex items-center justify-center transition-all group scale-100 hover:scale-110 active:scale-95 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+                            className="size-10 md:size-12 glass bg-white/5 hover:bg-cyan-400/20 border border-white/10 hover:border-cyan-400/40 rounded-xl md:rounded-2xl flex items-center justify-center transition-all group scale-100 hover:scale-110 active:scale-95 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
                             title="Open Global Navigation"
                         >
-                            <Menu size={20} className="text-white group-hover:text-cyan-400" />
+                            <Menu size={18} className="text-white group-hover:text-cyan-400" />
                         </button>
                     </div>
                 )}
@@ -214,23 +226,23 @@ function NativeHlsPlayer({ url, channelName }: NativePlayerProps) {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 30 }}
-                        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2"
+                        className="absolute bottom-4 md:bottom-8 left-0 right-0 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-3"
                     >
-                        <div className="glass bg-black/60 backdrop-blur-3xl px-6 py-4 rounded-3xl border border-white/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.5)] flex items-center gap-6">
+                        <div className="glass bg-black/60 backdrop-blur-3xl px-4 md:px-6 py-2 md:py-4 rounded-2xl md:rounded-3xl border border-white/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.5)] flex items-center gap-4 md:gap-6">
                             <button
                                 onClick={(e) => { e.stopPropagation(); togglePlay(); }}
-                                className="size-12 rounded-2xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white hover:text-f1-neon transition-all"
+                                className="size-10 md:size-12 rounded-xl md:rounded-2xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white hover:text-f1-neon transition-all"
                             >
-                                {playing ? <Pause fill="currentColor" size={24} /> : <Play fill="currentColor" size={24} />}
+                                {playing ? <Pause fill="currentColor" size={20} /> : <Play fill="currentColor" size={20} />}
                             </button>
 
-                            <div className="w-px h-8 bg-white/10" />
+                            <div className="w-px h-6 md:h-8 bg-white/10" />
 
-                            <div className="flex items-center gap-4 group/vol">
+                            <div className="flex items-center gap-3 md:gap-4 group/vol">
                                 <button onClick={(e) => { e.stopPropagation(); setMuted(!muted); }} className="text-white/60 hover:text-white transition-colors">
-                                    {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                                    {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
                                 </button>
-                                <div className="relative w-32 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                <div className="relative w-20 md:w-32 h-1 md:h-1.5 bg-white/10 rounded-full overflow-hidden">
                                     <motion.div
                                         className="absolute inset-y-0 left-0 bg-f1-neon"
                                         animate={{ width: `${(muted ? 0 : volume) * 100}%` }}
@@ -250,20 +262,20 @@ function NativeHlsPlayer({ url, channelName }: NativePlayerProps) {
                                 </div>
                             </div>
 
-                            <div className="w-px h-8 bg-white/10" />
+                            <div className="hidden xs:block w-px h-8 bg-white/10" />
 
                             <button
                                 onClick={(e) => { e.stopPropagation(); videoRef.current?.requestFullscreen(); }}
-                                className="size-12 rounded-2xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition-all"
+                                className="hidden xs:flex size-10 md:size-12 rounded-xl md:rounded-2xl bg-white/5 hover:bg-white/10 items-center justify-center text-white/60 hover:text-white transition-all"
                             >
-                                <Maximize2 size={20} />
+                                <Maximize2 size={18} />
                             </button>
                         </div>
 
-                        <div className="glass bg-black/60 backdrop-blur-3xl px-6 py-4 rounded-3xl border border-white/10 shadow-2xl flex items-center gap-3">
-                            <div className="flex flex-col">
-                                <span className="text-[12px] font-black text-white uppercase tracking-wider">{getChName(channelName)}</span>
-                                <span className="text-[8px] font-bold text-f1-neon uppercase tracking-widest leading-none">Status: Encrypted Stream</span>
+                        <div className="glass bg-black/60 backdrop-blur-3xl px-4 md:px-6 py-2 md:py-4 rounded-2xl md:rounded-3xl border border-white/10 shadow-2xl flex items-center gap-3 h-[44px] md:h-auto">
+                            <div className="flex flex-col items-center sm:items-start">
+                                <span className="text-[10px] md:text-[12px] font-black text-white uppercase tracking-wider truncate max-w-[120px] sm:max-w-none">{getChName(channelName)}</span>
+                                <span className="text-[7px] md:text-[8px] font-bold text-f1-neon uppercase tracking-widest leading-none">Status: Encrypted Stream</span>
                             </div>
                         </div>
                     </motion.div>
@@ -288,6 +300,7 @@ export default function LiveTransmission() {
     const [refreshing, setRefreshing] = useState(false);
     const [activeCategory, setActiveCategory] = useState<'all' | 'f1' | 'other'>('all');
     const [watchDomain, setWatchDomain] = useState("php.adffdafdsafds.sbs");
+    const [showHub, setShowHub] = useState(false);
     const [stream, setStream] = useState<StreamState>({
         type: 'idle', url: '', channel: null, event: null
     });
@@ -330,6 +343,7 @@ export default function LiveTransmission() {
     const selectChannel = (event: GamingEvent, ch: Channel) => {
         const proxyUrl = `/api/player?channel=${encodeURIComponent(ch.name)}&domain=${encodeURIComponent(watchDomain)}`;
         setStream({ type: 'loading', url: proxyUrl, channel: ch, event: event });
+        setShowHub(false); // Close hub on mobile after selection
         setTimeout(() => {
             setStream(prev => {
                 if (prev.type === 'loading' && prev.channel?.link === ch.link) return { ...prev, type: 'iframe' };
@@ -384,95 +398,122 @@ export default function LiveTransmission() {
                 />
             </div>
 
-            {/* ── Fixed Sidebar: Glassmorphic Channel List ────────────────── */}
-            <div className="w-80 flex-shrink-0 z-40 p-4 pl-6">
-                <div className="h-full flex flex-col glass bg-zinc-950/60 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden">
-                    <div className="p-8 pb-4 flex items-center justify-between">
-                        <div className="flex flex-col">
-                            <h3 className="text-sm font-black uppercase tracking-widest text-white">Satellite Hub</h3>
-                            <div className="flex items-center gap-2 mt-1">
-                                <div className="size-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
-                                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-tighter">Nodes Active: {events.length + PINNED_CHANNELS.channels.length}</span>
-                            </div>
-                        </div>
-                    </div>
+            {/* ── Satellite Hub: Glassmorphic Channel List ────────────────── */}
+            <AnimatePresence>
+                {(showHub || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
+                    <>
+                        {/* Mobile Overlay Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setShowHub(false)}
+                            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] lg:hidden"
+                        />
 
-                    {/* Categories */}
-                    <div className="px-8 pb-6 flex items-center gap-2">
-                        <button
-                            onClick={() => setActiveCategory('all')}
-                            className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${activeCategory === 'all' ? 'bg-f1-neon text-white' : 'bg-white/5 text-zinc-500 hover:bg-white/10'}`}
+                        <motion.div
+                            initial={{ x: -400 }}
+                            animate={{ x: 0 }}
+                            exit={{ x: -400 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="fixed lg:relative inset-y-0 left-0 w-80 flex-shrink-0 z-50 p-4 lg:pl-6 h-full"
                         >
-                            Global
-                        </button>
-                        <button
-                            onClick={() => setActiveCategory('f1')}
-                            className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${activeCategory === 'f1' ? 'bg-f1-neon text-white' : 'bg-white/5 text-zinc-500 hover:bg-white/10'}`}
-                        >
-                            Speed
-                        </button>
-                    </div>
-
-                    <div className="flex-1 overflow-y-auto custom-scrollbar px-6 space-y-8 pb-8">
-                        {filteredEvents.map((event) => (
-                            <div key={event.id} className="space-y-4">
-                                <div className="flex items-center gap-3 px-2">
-                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
-                                    <span className="text-[10px] font-black uppercase tracking-[.2em] text-zinc-600 whitespace-nowrap">
-                                        {event.league || event.sport}
-                                    </span>
-                                    <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
+                            <div className="h-full flex flex-col glass bg-zinc-950/60 backdrop-blur-3xl border border-white/10 rounded-[2rem] lg:rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden">
+                                <div className="p-6 lg:p-8 pb-4 flex items-center justify-between">
+                                    <div className="flex flex-col">
+                                        <h3 className="text-sm font-black uppercase tracking-widest text-white">Satellite Hub</h3>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <div className="size-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+                                            <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-tighter">Nodes Active: {events.length + PINNED_CHANNELS.channels.length}</span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowHub(false)}
+                                        className="lg:hidden size-8 flex items-center justify-center rounded-full bg-white/5 text-white"
+                                    >
+                                        <X size={16} />
+                                    </button>
                                 </div>
 
-                                <div className="grid gap-2">
-                                    {event.channels.map(ch => {
-                                        const isActive = stream.channel?.link === ch.link && stream.event?.id === event.id;
-                                        return (
-                                            <button
-                                                key={ch.link}
-                                                onClick={() => selectChannel(event, ch)}
-                                                className={`relative group flex items-center gap-4 p-4 rounded-3xl transition-all border ${isActive
-                                                    ? 'bg-f1-neon/5 border-f1-neon/30 text-white shadow-[0_10px_30px_-10px_rgba(225,6,0,0.1)]'
-                                                    : 'bg-white/[0.02] border-white/5 hover:bg-white/5 text-zinc-400 hover:text-white'
-                                                    }`}
-                                            >
-                                                {isActive && (
-                                                    <motion.div
-                                                        layoutId="active-pill"
-                                                        className="absolute inset-0 border border-f1-neon/40 rounded-3xl"
-                                                    />
-                                                )}
-                                                <div className={`size-10 rounded-2xl flex items-center justify-center transition-all ${isActive ? 'bg-f1-neon text-white shadow-[0_0_15px_rgba(225,6,0,0.4)]' : 'bg-white/5 text-zinc-600 group-hover:text-zinc-300'}`}>
-                                                    <Globe size={18} strokeWidth={isActive ? 3 : 2} />
-                                                </div>
-                                                <div className="flex-1 text-left">
-                                                    <p className="text-[12px] font-black leading-tight tracking-tight">
-                                                        {getChName(ch.name)}
-                                                    </p>
-                                                    <div className="flex items-center gap-2 mt-1">
-                                                        <span className="text-[8px] font-bold text-zinc-600 uppercase tracking-widest">{getLang(ch.name)}</span>
-                                                        {isActive && <motion.div animate={{ scale: [1, 1.5, 1] }} transition={{ repeat: Infinity }} className="size-1 rounded-full bg-f1-neon" />}
-                                                    </div>
-                                                </div>
-                                            </button>
-                                        );
-                                    })}
+                                {/* Categories */}
+                                <div className="px-6 lg:px-8 pb-6 flex items-center gap-2">
+                                    <button
+                                        onClick={() => setActiveCategory('all')}
+                                        className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${activeCategory === 'all' ? 'bg-f1-neon text-white' : 'bg-white/5 text-zinc-500 hover:bg-white/10'}`}
+                                    >
+                                        Global
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveCategory('f1')}
+                                        className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${activeCategory === 'f1' ? 'bg-f1-neon text-white' : 'bg-white/5 text-zinc-500 hover:bg-white/10'}`}
+                                    >
+                                        Speed
+                                    </button>
+                                </div>
+
+                                <div className="flex-1 overflow-y-auto custom-scrollbar px-5 lg:px-6 space-y-8 pb-8">
+                                    {filteredEvents.map((event) => (
+                                        <div key={event.id} className="space-y-4">
+                                            <div className="flex items-center gap-3 px-2">
+                                                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
+                                                <span className="text-[10px] font-black uppercase tracking-[.2em] text-zinc-600 whitespace-nowrap">
+                                                    {event.league || event.sport}
+                                                </span>
+                                                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
+                                            </div>
+
+                                            <div className="grid gap-2">
+                                                {event.channels.map(ch => {
+                                                    const isActive = stream.channel?.link === ch.link && stream.event?.id === event.id;
+                                                    return (
+                                                        <button
+                                                            key={ch.link}
+                                                            onClick={() => selectChannel(event, ch)}
+                                                            className={`relative group flex items-center gap-3 p-3 lg:p-4 rounded-2xl lg:rounded-3xl transition-all border ${isActive
+                                                                ? 'bg-f1-neon/5 border-f1-neon/30 text-white shadow-[0_10px_30px_-10px_rgba(225,6,0,0.1)]'
+                                                                : 'bg-white/[0.02] border-white/5 hover:bg-white/5 text-zinc-400 hover:text-white'
+                                                                }`}
+                                                        >
+                                                            {isActive && (
+                                                                <motion.div
+                                                                    layoutId="active-pill"
+                                                                    className="absolute inset-0 border border-f1-neon/40 rounded-2xl lg:rounded-3xl"
+                                                                />
+                                                            )}
+                                                            <div className={`size-8 lg:size-10 rounded-xl lg:rounded-2xl flex items-center justify-center transition-all ${isActive ? 'bg-f1-neon text-white shadow-[0_0_15px_rgba(225,6,0,0.4)]' : 'bg-white/5 text-zinc-600 group-hover:text-zinc-300'}`}>
+                                                                <Globe size={16} strokeWidth={isActive ? 3 : 2} />
+                                                            </div>
+                                                            <div className="flex-1 text-left">
+                                                                <p className="text-[11px] lg:text-[12px] font-black leading-tight tracking-tight">
+                                                                    {getChName(ch.name)}
+                                                                </p>
+                                                                <div className="flex items-center gap-2 mt-0.5 lg:mt-1">
+                                                                    <span className="text-[7px] lg:text-[8px] font-bold text-zinc-600 uppercase tracking-widest">{getLang(ch.name)}</span>
+                                                                    {isActive && <motion.div animate={{ scale: [1, 1.5, 1] }} transition={{ repeat: Infinity }} className="size-1 rounded-full bg-f1-neon" />}
+                                                                </div>
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="p-6 lg:p-8 pt-4 border-t border-white/5 flex items-center justify-between bg-black/20">
+                                    <div className="flex items-center gap-2">
+                                        <div className="size-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                                        <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-tighter">Signal Optimized</span>
+                                    </div>
+                                    <button onClick={fetchData} className="text-zinc-600 hover:text-white transition-colors">
+                                        <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
+                                    </button>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-
-                    <div className="p-8 pt-4 border-t border-white/5 flex items-center justify-between bg-black/20">
-                        <div className="flex items-center gap-2">
-                            <div className="size-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                            <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-tighter">Signal Optimized</span>
-                        </div>
-                        <button onClick={fetchData} className="text-zinc-600 hover:text-white transition-colors">
-                            <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
-                        </button>
-                    </div>
-                </div>
-            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
 
             {/* ── Main Viewport: Player Area ─────────────────────────── */}
             <div className="flex-1 relative bg-black transition-all duration-700 ease-in-out">
@@ -560,6 +601,7 @@ export default function LiveTransmission() {
                             <NativeHlsPlayer
                                 url={stream.url}
                                 channelName={stream.channel?.name || 'Unknown'}
+                                onToggleHub={() => setShowHub(true)}
                             />
                         </motion.div>
                     )}

@@ -321,7 +321,7 @@ export default function Map({ filter }: Props) {
 
 	if (!points || !minX || !minY || !widthX || !widthY) {
 		return (
-			<div className="h-full w-full p-2" style={{ minHeight: "35rem" }}>
+			<div className="h-full w-full p-2" style={{ minHeight: "20rem" }}>
 				<div className="h-full w-full animate-pulse rounded-lg bg-zinc-800" />
 			</div>
 		);
