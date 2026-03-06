@@ -17,22 +17,16 @@ export const useSocket = ({ handleInitial, handleUpdate }: Props) => {
 	useEffect(() => {
 		// Forza sempre l'uso del backend Railway in produzione
 		const baseUrl = env.NEXT_PUBLIC_LIVE_URL;
-		console.log("[Socket] Connecting to:", `${baseUrl}/api/realtime`);
-		
-		// Se l'URL è example.com, non tentare la connessione
-		if (baseUrl.includes("example.com")) {
-			console.log("[Socket] Example URL detected, skipping connection");
-			return;
-		}
-
 		const sse = new EventSource(`${baseUrl}/api/realtime`);
 
-		sse.onerror = (e) => {
-			console.error("[Socket] SSE Error:", e);
+		sse.onerror = () => {
 			setConnected(false);
+			if (process.env.NODE_ENV === "development") {
+				console.warn("[Socket] SSE connection error (backend unreachable or CORS)");
+			}
 		};
 		sse.onopen = () => {
-			console.log(`[Socket] SSE Connected to Railway backend`);
+			console.log(`[Socket] SSE Connected to Local backend`);
 			setConnected(true);
 		};
 

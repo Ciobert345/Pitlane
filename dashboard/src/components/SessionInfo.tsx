@@ -4,6 +4,7 @@ import { utc, duration } from "moment";
 
 import { useDataStore } from "@/stores/useDataStore";
 import { useSettingsStore } from "@/stores/useSettingsStore";
+import clsx from "clsx";
 
 import Flag from "@/components/Flag";
 
@@ -18,7 +19,7 @@ const sessionPartPrefix = (name: string) => {
 	}
 };
 
-export default function SessionInfo() {
+export default function SessionInfo({ className, compact = false }: { className?: string; compact?: boolean }) {
 	const clock = useDataStore((state) => state.state?.ExtrapolatedClock);
 	const session = useDataStore((state) => state.state?.SessionInfo);
 	const timingData = useDataStore((state) => state.state?.TimingData);
@@ -37,9 +38,9 @@ export default function SessionInfo() {
 			: undefined;
 
 	return (
-		<div className="flex items-center gap-6">
-			<div className="shrink-0 scale-125">
-				<Flag countryCode={session?.Meeting.Country.Code} />
+		<div className={clsx("flex items-center", compact ? "gap-2" : "gap-6", className)}>
+			<div className={clsx("shrink-0 overflow-hidden rounded", compact ? "h-4 w-6 shadow-sm border border-white/10" : "h-12 w-16 scale-125")}>
+				<Flag countryCode={session?.Meeting.Country.Code} className="!h-full !w-full" />
 			</div>
 
 			<div className="flex flex-col justify-center gap-0.5">
@@ -61,18 +62,20 @@ export default function SessionInfo() {
 				)}
 			</div>
 
-			<div className="flex flex-col items-center justify-center border-l border-white/10 pl-6 ml-2">
-				{timeRemaining !== undefined ? (
-					<div className="flex flex-col items-end">
-						<span className="text-[8px] font-black uppercase tracking-[0.3em] text-f1-neon mb-1">Session Timer</span>
-						<p className="text-4xl font-black tabular-nums tracking-tighter text-white leading-none drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-							{timeRemaining}
-						</p>
-					</div>
-				) : (
-					<div className="h-8 w-24 animate-pulse rounded bg-zinc-800/50" />
-				)}
-			</div>
+			{!compact && (
+				<div className="flex flex-col items-center justify-center border-l border-white/10 pl-6 ml-2">
+					{timeRemaining !== undefined ? (
+						<div className="flex flex-col items-end">
+							<span className="text-[8px] font-black uppercase tracking-[0.3em] text-f1-neon mb-1">Session Timer</span>
+							<p className="text-4xl font-black tabular-nums tracking-tighter text-white leading-none drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+								{timeRemaining}
+							</p>
+						</div>
+					) : (
+						<div className="h-8 w-24 animate-pulse rounded bg-zinc-800/50" />
+					)}
+				</div>
+			)}
 		</div>
 	);
 }

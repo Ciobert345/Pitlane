@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from "react";
 
 import { useStores } from "@/hooks/useStores";
 import { useDataEngine } from "@/hooks/useDataEngine";
@@ -18,11 +18,20 @@ const LiveDataContext = createContext<LiveDataContextValue>({
 
 export function LiveDataProvider({ children }: { children: ReactNode }) {
 	const stores = useStores();
-	const { handleInitial, handleUpdate, maxDelay } = useDataEngine(stores);
-	const { connected } = useSocket({ handleInitial, handleUpdate });
+	const [connected, setConnected] = useState(false);
+	const { handleInitial, handleUpdate, maxDelay } = useDataEngine({ ...stores, connected });
+	const { connected: socketConnected } = useSocket({ handleInitial, handleUpdate });
+
+	useEffect(() => {
+		if (socketConnected !== connected) {
+			setConnected(socketConnected);
+		}
+	}, [socketConnected, connected]);
+
+	const value = useMemo(() => ({ connected, maxDelay }), [connected, maxDelay]);
 
 	return (
-		<LiveDataContext.Provider value={{ connected, maxDelay }}>
+		<LiveDataContext.Provider value={value}>
 			{children}
 		</LiveDataContext.Provider>
 	);

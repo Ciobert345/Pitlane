@@ -19,9 +19,10 @@ type Props = {
 	updateState: (state: State) => void;
 	updatePosition: (pos: Positions) => void;
 	updateCarData: (car: CarsData) => void;
+	connected: boolean;
 };
 
-export const useDataEngine = ({ updateState, updatePosition, updateCarData }: Props) => {
+export const useDataEngine = ({ updateState, updatePosition, updateCarData, connected }: Props) => {
 	const buffers = {
 		ExtrapolatedClock: useStatefulBuffer(),
 		TopThree: useStatefulBuffer(),
@@ -189,11 +190,16 @@ export const useDataEngine = ({ updateState, updatePosition, updateCarData }: Pr
 	};
 
 	useEffect(() => {
-		intervalRef.current = setInterval(handleCurrentState, UPDATE_MS);
+		if (connected) {
+			intervalRef.current = setInterval(handleCurrentState, UPDATE_MS);
+		} else {
+			if (intervalRef.current) clearInterval(intervalRef.current);
+			intervalRef.current = null;
+		}
 		return () => (intervalRef.current ? clearInterval(intervalRef.current) : void 0);
 		// TODO investigate if this might have performance issues
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [connected]);
 
 	return {
 		handleUpdate,

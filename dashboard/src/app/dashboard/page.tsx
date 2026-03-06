@@ -12,6 +12,7 @@ import StrategyWidget from "@/components/dashboard/StrategyWidget";
 import LapTimeChart from "@/components/dashboard/LapTimeChart";
 import LayoutSwitcher from "@/components/dashboard/LayoutSwitcher";
 import WeatherWidget from "@/components/dashboard/WeatherWidget";
+import LiveTransmission from "@/components/dashboard/LiveTransmission";
 import ConnectionStatus from "@/components/ConnectionStatus";
 import { useLayoutStore } from "@/stores/useLayoutStore";
 import { useSettingsStore } from "@/stores/useSettingsStore";
@@ -48,7 +49,7 @@ function Panel({ label, children, className = "" }: { label: string; children: R
 
 function SocketStatus() {
 	const { connected } = useSocket({ handleInitial: () => { }, handleUpdate: () => { } });
-	
+
 	return (
 		<div className="flex items-center gap-2 rounded-full border border-white/5 bg-white/[0.02] px-2.5 py-1">
 			<ConnectionStatus connected={connected} />
@@ -80,22 +81,7 @@ export default function Page() {
 
 	return (
 		// Fill the parent container height exactly — no page-level scroll
-		<div className="flex h-full min-h-0 flex-col gap-3 p-3">
-
-			{/* Compact top bar: title + layout switcher in one line */}
-			<div className="flex shrink-0 items-center justify-between">
-				<div className="flex items-baseline gap-4">
-					<div className="flex items-baseline gap-2">
-						<h1 className="text-base font-black uppercase tracking-widest text-white">Live</h1>
-						<span className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-600">
-							{layoutMode === "race" && "Race"}
-							{layoutMode === "focus" && "Driver Focus"}
-						</span>
-					</div>
-					<SocketStatus />
-				</div>
-				<LayoutSwitcher />
-			</div>
+		<div className="flex h-full min-h-0 flex-col gap-2 p-2">
 
 			{/* Mode Content */}
 			<AnimatePresence mode="wait">
@@ -103,7 +89,7 @@ export default function Page() {
 					<motion.div
 						key="race"
 						variants={fadeItem} initial="hidden" animate="show" exit="exit"
-						className="grid min-h-0 flex-1 grid-cols-[minmax(0,440px)_1fr_320px] gap-4"
+						className="grid min-h-0 flex-1 grid-cols-[minmax(0,420px)_1fr_300px] gap-3"
 					>
 						{/* LEFT: Timing Tower */}
 						<div className="flex min-h-0 flex-col rounded-2xl border border-white/5 bg-zinc-950/20 px-4 py-3">
@@ -125,7 +111,7 @@ export default function Page() {
 							</div>
 
 							{/* Unified Feeds Row */}
-							<div className="grid min-h-0 h-64 shrink-0 grid-cols-[1fr_1.1fr_1fr] gap-4">
+							<div className="grid min-h-0 h-60 shrink-0 grid-cols-[1fr_1.1fr_1fr] gap-3">
 								<div className="flex min-h-0 flex-col rounded-xl border border-white/5 bg-black/20 backdrop-blur-md px-3 py-2">
 									{/* Premium Tab Switcher */}
 									<div className="flex items-center gap-1 mb-3 bg-white/5 p-1 rounded-lg mx-auto">

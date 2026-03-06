@@ -26,6 +26,10 @@ const liveTimingItems = [
 		href: "/dashboard/standings",
 		name: "Standings",
 	},
+	{
+		href: "/live",
+		name: "Live",
+	},
 ];
 
 type Props = {
@@ -90,8 +94,14 @@ export default function Sidebar({ connected }: Props) {
 	}, [unpin]);
 
 	return (
-		<div>
-			<motion.div className="hidden md:block transition-all duration-300" initial={{ width: pinned ? 216 : 8 }} animate={{ width: pinned ? 216 : 8 }} />
+		<div className="h-full flex flex-shrink-0 relative">
+			{/* Spacer for pinned state */}
+			<motion.div
+				className="hidden md:block"
+				initial={false}
+				animate={{ width: pinned ? 260 : 0 }}
+				transition={{ type: "spring", damping: 30, stiffness: 200 }}
+			/>
 
 			<AnimatePresence>
 				{opened && (
@@ -105,20 +115,27 @@ export default function Sidebar({ connected }: Props) {
 				)}
 			</AnimatePresence>
 
+			{/* Invisible Hover Trigger Area (only when not pinned) */}
+			{!pinned && (
+				<div
+					className="fixed top-0 left-0 z-[80] h-full w-[12px] bg-transparent"
+					onMouseEnter={handleHoverStart}
+				/>
+			)}
+
 			<motion.div
-				className="no-scrollbar fixed inset-y-0 left-0 z-[70] flex overflow-y-auto w-[260px] pr-8"
+				className="no-scrollbar h-full flex overflow-y-auto w-[260px] absolute top-0 left-0 z-[75]"
 				onHoverEnd={!pinned ? handleHoverEnd : undefined}
-				onHoverStart={!pinned ? handleHoverStart : undefined}
-				initial={{ x: pinned || opened ? 0 : -235 }}
-				animate={{ x: pinned || opened ? 0 : -235 }}
-				transition={{ type: "spring", damping: 25, stiffness: 150 }}
+				initial={false}
+				animate={{ x: pinned || opened ? 0 : -260 }}
+				transition={{ type: "spring", damping: 30, stiffness: 200 }}
 			>
 				{/* Inner actual visual sidebar */}
 				<nav
-					className={clsx("flex w-52 flex-col p-4 transition-[border-radius,height,margin,background] duration-300", {
-						"my-2 ml-2 h-[calc(100vh-16px)] glass bg-zinc-950/80 backdrop-blur-3xl rounded-2xl border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.8),_0_0_20px_rgba(255,255,255,0.05),_inset_0_1px_1px_rgba(255,255,255,0.1)]": !pinned,
-						"h-screen bg-black/90 backdrop-blur-3xl border-r border-white/5": pinned && oledMode,
-						"h-screen bg-gradient-to-b from-zinc-950/90 to-black/90 backdrop-blur-3xl border-r border-white/10 shadow-lg": pinned && !oledMode,
+					className={clsx("flex w-full flex-col p-4 transition-[border-radius,height,margin,background,width] duration-500 ease-in-out", {
+						"my-2 ml-2 h-[calc(100%-16px)] glass bg-zinc-950/80 backdrop-blur-3xl rounded-2xl border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.8),_0_0_20px_rgba(255,255,255,0.05),_inset_0_1px_1px_rgba(255,255,255,0.1)]": !pinned,
+						"h-full bg-black/95 backdrop-blur-3xl border-r border-f1-neon/30": pinned && oledMode,
+						"h-full bg-gradient-to-b from-zinc-950/95 to-black/95 backdrop-blur-3xl border-r border-white/10 shadow-[20px_0_40px_rgba(0,0,0,0.4)]": pinned && !oledMode,
 					})}
 				>
 					<div className="flex items-center justify-between gap-2 mb-6">
@@ -159,8 +176,8 @@ export default function Sidebar({ connected }: Props) {
 							</p>
 							<div className="flex flex-col gap-1">
 								<Item item={{ href: "/dashboard/settings", name: "Settings" }} />
-								<Item target="_blank" item={{ href: "/schedule", name: "Schedule" }} />
-								<Item target="_blank" item={{ href: "/", name: "Home" }} />
+								<Item item={{ href: "/schedule", name: "Schedule" }} />
+								<Item item={{ href: "/", name: "Home" }} />
 							</div>
 						</section>
 					</div>
@@ -174,7 +191,7 @@ export default function Sidebar({ connected }: Props) {
 					</div>
 				</nav>
 			</motion.div>
-		</div>
+		</div >
 	);
 }
 

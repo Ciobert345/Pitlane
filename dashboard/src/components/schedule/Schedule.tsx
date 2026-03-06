@@ -13,8 +13,9 @@ export const getSchedule = async () => {
 		const scheduleReq = await fetch(`${env.API_URL}/api/schedule`, {
 			cache: "no-store",
 		});
+		if (!scheduleReq.ok) return null;
 		const schedule: RoundType[] = await scheduleReq.json();
-
+		if (!Array.isArray(schedule)) return null;
 		return schedule;
 	} catch (e) {
 		console.error("error fetching schedule", e);

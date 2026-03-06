@@ -18,6 +18,10 @@ type Props = Readonly<{
 	children: ReactNode;
 }>;
 
+import TitleBar from "@/components/TitleBar";
+import SidebarWrapper from "@/components/SidebarWrapper";
+import GlobalHeader from "@/components/GlobalHeader";
+
 export default function RootLayout({ children }: Props) {
 	return (
 		<html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} font-sans text-white`}>
@@ -33,7 +37,22 @@ export default function RootLayout({ children }: Props) {
 
 			<body>
 				<OledModeProvider>
-					<LiveDataProvider>{children}</LiveDataProvider>
+					<LiveDataProvider>
+						<div className="flex flex-col w-full bg-zinc-950 h-screen overflow-hidden relative">
+							<TitleBar />
+							<div id="electron-content-wrapper" className="flex-1 w-full flex relative min-h-0">
+								<div className="flex-shrink-0 relative z-[100] h-full">
+									<SidebarWrapper />
+								</div>
+								<div className="flex-1 flex flex-col relative overflow-hidden min-h-0">
+									<GlobalHeader />
+									<div className="flex-1 overflow-hidden min-h-0">
+										{children}
+									</div>
+								</div>
+							</div>
+						</div>
+					</LiveDataProvider>
 				</OledModeProvider>
 			</body>
 		</html>

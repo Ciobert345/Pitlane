@@ -14,8 +14,9 @@ export const getNext = async () => {
 		const nextReq = await fetch(`${env.API_URL}/api/schedule/next`, {
 			cache: "no-store",
 		});
+		if (!nextReq.ok) return null;
 		const next: RoundType = await nextReq.json();
-
+		if (!next?.sessions || !Array.isArray(next.sessions)) return null;
 		return next;
 	} catch (e) {
 		if (process.env.NODE_ENV !== "production") {
@@ -37,8 +38,9 @@ export default async function NextRound() {
 		);
 	}
 
-	const nextSession = next.sessions.filter((s) => utc(s.start) > utc() && s.kind.toLowerCase() !== "race")[0];
-	const nextRace = next.sessions.find((s) => s.kind.toLowerCase() == "race");
+	const sessions = next.sessions ?? [];
+	const nextSession = sessions.filter((s) => utc(s.start) > utc() && s.kind?.toLowerCase() !== "race")[0];
+	const nextRace = sessions.find((s) => s.kind?.toLowerCase() === "race");
 
 	return (
 		<div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
