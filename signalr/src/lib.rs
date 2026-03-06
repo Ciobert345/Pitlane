@@ -48,10 +48,10 @@ async fn negotiate(url: &str, hub: &str) -> Result<Negotiation, anyhow::Error> {
     let headers = req.headers().clone();
     let res: NegotiationResponse = serde_json::from_str(&req.text().await?)?;
 
-    let cookie = headers[header::SET_COOKIE].to_str()?
-        .split(';')
-        .next()
-        .unwrap_or("")
+    let cookie = headers.get(header::SET_COOKIE)
+        .and_then(|h| h.to_str().ok())
+        .and_then(|s| s.split(';').next())
+        .unwrap_or_default()
         .to_string();
 
     Ok(Negotiation {
@@ -81,9 +81,9 @@ pub async fn create_client(url: &str, hub: &str) -> Result<SignalrClient, anyhow
         ],
     )?;
 
-    let url = match env::var_os("F1_DEV_URL") {
-        Some(env_url) => Url::from_str(&env_url.into_string().unwrap())?,
-        None => url,
+    let url = match env::var("F1_DEV_URL") {
+        Ok(env_url) => Url::from_str(&env_url)?,
+        Err(_) => url,
     };
 
     info!("connecting to {url}");
